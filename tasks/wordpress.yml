@@ -1,0 +1,64 @@
+---
+- name: Download and extract wordpress archive
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: /var/www
+    remote_src: true
+  register: wordpress_download
+
+- name: Copy wp-confing
+  template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_path }}/wp-config.php"
+    owner: www-data
+    group: www-data
+  register: copy_template
+
+- name: Change folder owner
+  file:
+    path: "{{ wordpress_path }}"
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: true
+  register: wordpress_owner
+
+- name: Get files to change permissions
+  find:
+    paths: "{{ wordpress_path }}"
+    file_type: file
+  register: find_files
+
+- set_fact:
+    files: "{{ find_files.files | map(attribute='path') | list }}"
+
+- name: Get paths to change permissions
+  find:
+    paths: "{{ wordpress_path }}"
+    file_type: directory
+  register: find_paths
+
+- set_fact:
+    paths: "{{ find_paths.files | map(attribute='path') | list }}"
+
+- name: Change permission folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ paths }}"
+  register: chmod_paths
+
+- name: Change files permissions
+  file:
+    path: "{{ item }}"
+    state: touch
+    mode: 0640
+  with_items:
+    - "{{ files }}"
+  register: chmod_files
+
+- name: Debug ansible facts
+  debug:
+    msg: "{{ ansible_facts['default_ipv4']['address'] }}"

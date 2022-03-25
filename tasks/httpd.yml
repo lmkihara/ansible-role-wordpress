@@ -1,0 +1,15 @@
+---
+- name: copy template for wordpress configuration
+  template:
+    src: wordpress.conf.j2
+    dest: /etc/apache2/sites-available/wordpress.conf
+  register: copy_httpd
+  notify: restart apache-httpd
+
+- name: enable rewrite module
+  shell: /usr/sbin/a2enmod rewrite
+  notify: restart apache-httpd
+
+- name: enable wordpress site
+  shell: /usr/sbin/a2ensite wordpress.conf
+  notify: restart apache-httpd

@@ -1,0 +1,10 @@
+---
+# tasks file for wordpress
+- name: Install packages
+  include: packages.yml
+
+- name: Install wordpress
+  include: wordpress.yml
+
+- name: Configure apache-httpd
+  include: httpd.yml

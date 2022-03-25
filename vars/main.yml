@@ -1,0 +1,21 @@
+---
+# vars file for wordpress
+php_packages:
+  - php 
+  - php-cli
+  - php-fpm
+  - php-json
+  - php-common
+  - php-mysql
+  - php-zip
+  - php-gd
+  - php-mbstring
+  - php-curl
+  - php-xml
+  - php-pear
+  - php-bcmath
+
+packages:
+  - apache2
+
+wordpress_path: /var/www/wordpress
