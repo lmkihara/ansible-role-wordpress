@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    mysql_dbname: wordpress
+    mysql_user: wordpress
+    mysql_pass: password
+    mysql_host: localhost
+
+  tasks:
+    - name: "Include wordpress"
+      include_role:
+        name: "ansible-role-wordpress"
