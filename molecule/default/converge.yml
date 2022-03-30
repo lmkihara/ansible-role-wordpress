@@ -11,4 +11,4 @@
   tasks:
     - name: "Include wordpress"
       include_role:
-        name: "ansible-role-wordpress"
+        name: "ansible_role_wordpress"
